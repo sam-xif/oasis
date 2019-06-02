@@ -29,7 +29,6 @@ class Project(models.Model):
     # collaborators = models.ManyToMany(settings.AUTH_USER_MODEL)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
-    votes = models.IntegerField(default=0, blank=True)
     lifecycle = models.CharField(max_length=200, choices=[(tag.name, tag.value) for tag in ProjectLifecycle])
     tags = models.ManyToManyField(Tag, blank=True)
 
@@ -49,7 +48,7 @@ class Resource(models.Model):
     choices = ("url", "image")
     project = models.ForeignKey(
         Project,
-        related_name="resources"
+        related_name="resources", on_delete=models.CASCADE
     )
 
 
@@ -60,7 +59,7 @@ class Comment(models.Model):
     updated = models.DateTimeField(blank=True, auto_now=True)
     project = models.ForeignKey(
         Project,
-        related_name="comments"
+        related_name="comments", on_delete=models.CASCADE
     )
     votes = models.IntegerField()
 
@@ -81,7 +80,7 @@ class Vote(models.Model):
     created_on = models.DateTimeField(auto_now_add=True)
     project = models.ForeignKey(
         Project,
-        related_name="votes"
+        related_name="votes", on_delete=models.CASCADE
     )
 
     # def __str__(self):
