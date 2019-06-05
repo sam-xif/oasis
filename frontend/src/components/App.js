@@ -5,13 +5,18 @@ import {client} from '../index.js'
 import { Query } from 'react-apollo'
 import gql from 'graphql-tag'
 
-// const projectsQuery = gql`
-//   {
-//     projects {
-//       name
-//     }
-//   }
-// `
+
+
+const projectsQuery = gql`
+  {
+      project {
+          id
+          name
+          description
+          lifecycle
+      }
+  }
+`
 
 
 
@@ -34,7 +39,7 @@ class ProjectTableElement extends React.Component {
 
 class Project extends React.Component {
   render() {
-    const {name, description, link, lifecycle, onHide} = this.props;
+    const {name, description, lifecycle, onHide} = this.props;
     console.log('went here');
     console.log(this.props);
     return <Modal
@@ -50,7 +55,6 @@ class Project extends React.Component {
       <Modal.Body>
         <ul>
           <li>Description: {description}</li>
-          <li>Link: {link} </li>
           <li>Lifecycle status: {lifecycle}</li>
         </ul>
       </Modal.Body>
@@ -64,9 +68,9 @@ class Project extends React.Component {
 
 class ProjectTable extends React.Component {
   state = {
-    projects: [{id: 1, name: 'Some Cool Project', description: 'Description of some cool project', link: '/link1/', lifecycle: 'Prototype'},
-      {id: 2, name: 'Some other one', description: 'Description of some other cool project', link: '/link2', lifecycle: "Beta"},
-      {id: 3, name: 'Some third one', description: 'Description of some third cool project', link: '/link3', lifecycle: "Deployment"}],
+    projects: [{id: 1, name: 'Some Cool Project', description: 'Description of some cool project', lifecycle: 'Prototype'},
+      {id: 2, name: 'Some other one', description: 'Description of some other cool project', lifecycle: "Beta"},
+      {id: 3, name: 'Some third one', description: 'Description of some third cool project', lifecycle: "Deployment"}],
     showProject: false,
     projectToShow: 1
 
@@ -79,16 +83,28 @@ class ProjectTable extends React.Component {
   componentDidMount() {
     console.log('fetching')
 
-    // client.query({
-    //   query: gql`
-    //     {
-    //       projects {
-    //         name
-    //       }
-    //     }
-    //   `
-    // }).then(response => console.log('Got data', response.data))
+    client.query({
+      query: gql`
+        {
+          project {
+            id
+            name
+            description
+            lifecycle
+          }
+        }
+      `
+    }).then(response => {
+      console.log('Got data', response.data)
+      this.setState({projects: response.data.project})
+    });
 
+    // <Query query={projectsQuery}>
+    //   {({ loading, error, data }) => {
+    //     if (loading) return "Loading...";
+    //     if (error) return `Error! ${error.message}`;
+    //     console.log("data: ", data);}}
+    // </Query>
   }
 
   showProject = event => {
