@@ -4,6 +4,12 @@ from django.urls import reverse
 import uuid
 from enum import Enum
 
+
+class Profile(models.Model):
+    # user = models.OneToOneField(User)
+    last_login = models.DateTimeField()
+
+
 class ProjectLifecycle(Enum):
     IDEA = 'Idea stage'
     PROTOTYPE = 'Prototype'
