@@ -1,12 +1,13 @@
 from django.db import models
 from django.urls import reverse
+from django.conf import settings
 # from django.contrib.auth import User
 import uuid
 from enum import Enum
 
 
-class Profile(models.Model):
-    # user = models.OneToOneField(User)
+class UserProfile(models.Model):
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     last_login = models.DateTimeField()
 
 
@@ -31,15 +32,15 @@ class Project(models.Model):
     name = models.CharField(max_length=50)
     summary = models.CharField(max_length=200)
     description = models.TextField(blank=True)
-    # creator = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
-    # collaborators = models.ManyToMany(settings.AUTH_USER_MODEL)
-    created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True)
+    creator = models.ForeignKey(settings.AUTH_USER_MODEL, blank=True, on_delete=models.PROTECT, related_name='projects_created')
+    collaborators = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name='project_collaborated_on')
+    created_on = models.DateTimeField(auto_now_add=True)
+    updated_on = models.DateTimeField(auto_now=True)
     lifecycle = models.CharField(max_length=200, choices=[(tag.name, tag.value) for tag in ProjectLifecycle])
     tags = models.ManyToManyField(Tag, blank=True)
 
     class Meta:
-        ordering = ["-created"]
+        ordering = ["-created_on"]
 
     def __str__(self):
         return self.name
@@ -60,9 +61,9 @@ class Resource(models.Model):
 
 class Comment(models.Model):
     text = models.CharField(max_length=200)
-    # creator = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
-    created = models.DateTimeField(blank=True, auto_now_add=True)
-    updated = models.DateTimeField(blank=True, auto_now=True)
+    creator = models.ForeignKey(settings.AUTH_USER_MODEL, blank=True, on_delete=models.PROTECT)
+    created_on = models.DateTimeField(blank=True, auto_now_add=True)
+    updated_on = models.DateTimeField(blank=True, auto_now=True)
     project = models.ForeignKey(
         Project,
         related_name="comments", on_delete=models.CASCADE
@@ -70,7 +71,7 @@ class Comment(models.Model):
     votes = models.IntegerField()
 
     class Meta:
-        ordering = ["-created"]
+        ordering = ["-created_on"]
 
     def __str__(self):
         return self.text
@@ -81,13 +82,14 @@ class Vote(models.Model):
         ("U", "Up"),
         ("D", "Down"),
     )
-    # user = models.ForeignKey(settings.AUTH_USER_MODEL)
-    type = models.CharField(choices=TYPES, max_length=1)
-    created_on = models.DateTimeField(auto_now_add=True)
+    creator = models.ForeignKey(settings.AUTH_USER_MODEL, blank=True, on_delete=models.CASCADE)
+    type = models.CharField(max_length=1)  # Do custom validation on choices=TYPES https://github.com/graphql-python/graphene-django/issues/185#issuecomment-388469296
     project = models.ForeignKey(
         Project,
         related_name="votes", on_delete=models.CASCADE
     )
+    created_on = models.DateTimeField(auto_now_add=True)
+
 
     # def __str__(self):
     #     return self.user

@@ -12,8 +12,12 @@ const projectsQuery = gql`
       project {
           id
           name
+          summary
           description
           lifecycle
+          votes {
+              type
+          }
       }
   }
 `
@@ -40,7 +44,6 @@ class ProjectTableElement extends React.Component {
 class Project extends React.Component {
   render() {
     const {name, description, lifecycle, onHide} = this.props;
-    console.log('went here');
     console.log(this.props);
     return <Modal
         {...this.props}
@@ -68,44 +71,10 @@ class Project extends React.Component {
 
 class ProjectTable extends React.Component {
   state = {
-    projects: [{id: 1, name: 'Some Cool Project', description: 'Description of some cool project', lifecycle: 'Prototype'},
-      {id: 2, name: 'Some other one', description: 'Description of some other cool project', lifecycle: "Beta"},
-      {id: 3, name: 'Some third one', description: 'Description of some third cool project', lifecycle: "Deployment"}],
-    showProject: false,
-    projectToShow: 1
-
-
+    //showProject: false,
+    //projectToShow: 1
   };
 
-
-
-
-  componentDidMount() {
-    console.log('fetching')
-
-    client.query({
-      query: gql`
-        {
-          project {
-            id
-            name
-            description
-            lifecycle
-          }
-        }
-      `
-    }).then(response => {
-      console.log('Got data', response.data)
-      this.setState({projects: response.data.project})
-    });
-
-    // <Query query={projectsQuery}>
-    //   {({ loading, error, data }) => {
-    //     if (loading) return "Loading...";
-    //     if (error) return `Error! ${error.message}`;
-    //     console.log("data: ", data);}}
-    // </Query>
-  }
 
   showProject = event => {
       const id = event.target.value;
@@ -117,23 +86,31 @@ class ProjectTable extends React.Component {
   };
 
   render() {
-    const {projects, projectToShow, showProject} = this.state;
+      return (
+      <Query query={projectsQuery}>
+          {({ loading, error, data }) => {
+              if (loading) return <div>Fetching</div>
+              if (error) return <div>Error</div>
 
-    const projectsRendered = projects.map(project => <ProjectTableElement id={project.id} name={project.name} description={project.description} showProject={this.showProject}> </ProjectTableElement>);
-    const project = projects.find(el => {return el.id == projectToShow});
-    const newProps = {...project, onHide: this.hideProject, show:showProject}
-    const projectRendered = <Project {...newProps}/>;
-    console.log({...newProps})
-    //name={project.name} description={project.description} link={project.link} lifecycle={project.lifecycle}
+              const projects = data.project
+              const {projectToShow, showProject} = this.state;
 
-    return (
-        <div>
-          {projectsRendered}
-          {projectRendered}
-        </div>
-    );
+              const projectsElements = projects.map(project => <ProjectTableElement id={project.id} name={project.name} description={project.description} showProject={this.showProject}> </ProjectTableElement>);
+              const project = projects.find(el => {return el.id == projectToShow});
+              const newProps = {...project, onHide: this.hideProject, show:showProject}
+              const projectPopup = <Project {...newProps}/>;
+              console.log({...newProps})
+
+              return (
+                  <div>
+                      {projectsElements}
+                      {projectPopup}
+                  </div>
+              );
+          }}
+      </Query>
+      )
   }
-
 }
 
 class App extends React.Component {
