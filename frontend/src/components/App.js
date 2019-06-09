@@ -9,7 +9,7 @@ import gql from 'graphql-tag'
 
 const projectsQuery = gql`
   {
-      project {
+      projects {
           id
           name
           summary
@@ -92,7 +92,7 @@ class ProjectTable extends React.Component {
               if (loading) return <div>Fetching</div>
               if (error) return <div>Error</div>
 
-              const projects = data.project
+              const projects = data.projects
               const {projectToShow, showProject} = this.state;
 
               const projectsElements = projects.map(project => <ProjectTableElement id={project.id} name={project.name} description={project.description} showProject={this.showProject}> </ProjectTableElement>);
