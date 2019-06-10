@@ -1,9 +1,5 @@
 # Oasis
 
-Northeastern's Student-Led Idea Kickstarter
-
-### Motivation
-
 Northeastern Oasis is a university-endorsed web platform that provides students the opportunity to share, collaborate, and deploy real solutions that can further improve the Northeastern experience.
 
 ### Setup
