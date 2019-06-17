@@ -21,22 +21,31 @@ cd oasis
   **Backend Window**
 
   a. Move into the backend directory
+  
   ```shell
   cd backend
   ```
+  
   b. Install the requirements
+  
   ```shell
-  pip3 install requirements.txt
+  pip3 install -r requirements.txt
   ```
+  
   c. Make the Django migrations
+  
   ```shell
   python3 manage.py makemigrations
   ```
+  
   d. Run the migrations
+  
   ```shell
   python3 manage.py migrate
   ```
+  
   e. Start the server
+  
   ```shell
   python3 manage.py runserver
   ```
@@ -44,14 +53,19 @@ cd oasis
   **Frontend Window**
 
   a. Move into the frontend directory
+  
   ```shell
   cd frontend
   ```
+  
   b. Install node modules
+  
   ```shell
   npm install
   ```
+  
   c. Start the server
+  
   ```shell
   npm start
   ```
