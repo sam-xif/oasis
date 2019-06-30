@@ -9,7 +9,28 @@
       manifest.json provides metadata used when your web app is installed on a
       user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
     -->
+
+   <!-- TODO -- Figure out if we want to use npm or cdn for getting the react js in production
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <script src="https://unpkg.com/react@16.8.6/umd/react.production.min.js" crossorigin></script>
+
+    <script
+            src="https://unpkg.com/react-dom@16.8.6/umd/react-dom.production.min.js"
+            crossorigin></script>
+
+    <script
+            src="https://unpkg.com/react-bootstrap@1.0.0-beta.9/dist/react-bootstrap.min.js"
+            crossorigin></script>
+            -->
+    <link
+            rel="stylesheet"
+            href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+            integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+            crossorigin="anonymous"
+    />
+
+    <!-- <script>var Alert = ReactBootstrap.Alert;</script> -->
+
     <!--
       Notice the use of %PUBLIC_URL% in the tags above.
       It will be replaced with the URL of the `public` folder during the build.

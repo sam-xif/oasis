@@ -38,7 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'graphene_django',
-    'projects'
+    'projects',
+    'corsheaders'
 ]
 
 MIDDLEWARE = [
@@ -49,7 +50,11 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
+
 ]
+CORS_ORIGIN_ALLOW_ALL=True
 
 ROOT_URLCONF = 'oasis_app.urls'
 
@@ -86,6 +91,21 @@ DATABASES = {
     }
 }
 
+# AUTHENTICATION_BACKENDS = [
+#     'django_warrant.backend.CognitoBackend',
+# ]
+
+COGNITO_USER_POOL_ID = ""
+
+COGNITO_APP_ID = ""
+
+COGNITO_ATTR_MAPPING = { # Defaults
+    'email': 'email',
+    'given_name': 'first_name',
+    'family_name': 'last_name',
+}
+
+COGNITO_CREATE_UNKNOWN_USERS = True
 
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
