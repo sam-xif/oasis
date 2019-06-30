@@ -7,8 +7,10 @@ from enum import Enum
 
 
 class UserProfile(models.Model):
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
     last_login = models.DateTimeField()
+    # profile_picture = models.ImageField()
+
 
 
 class ProjectLifecycle(Enum):
@@ -32,12 +34,13 @@ class Project(models.Model):
     name = models.CharField(max_length=50)
     summary = models.CharField(max_length=200)
     description = models.TextField(blank=True)
-    creator = models.ForeignKey(settings.AUTH_USER_MODEL, blank=True, on_delete=models.PROTECT, related_name='projects_created')
-    collaborators = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name='project_collaborated_on')
+    creator = models.ForeignKey(UserProfile, blank=True, on_delete=models.PROTECT, related_name='projects_created')
+    collaborators = models.ManyToManyField(UserProfile, blank=True, related_name='project_collaborated_on')
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
     lifecycle = models.CharField(max_length=200, choices=[(tag.name, tag.value) for tag in ProjectLifecycle])
     tags = models.ManyToManyField(Tag, blank=True)
+    deleted = models.BooleanField(default=False)
 
     class Meta:
         ordering = ["-created_on"]
@@ -91,5 +94,3 @@ class Vote(models.Model):
     created_on = models.DateTimeField(auto_now_add=True)
 
 
-    # def __str__(self):
-    #     return self.user
