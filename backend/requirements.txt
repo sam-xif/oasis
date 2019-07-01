@@ -1,4 +1,5 @@
 aniso8601==3.0.2
+coverage==4.5.3
 Django==2.1.9
 django-cors-headers==3.0.2
 django-environ==0.4.5
@@ -15,3 +16,5 @@ pytz==2019.1
 Rx==1.6.1
 singledispatch==3.4.0.3
 six==1.12.0
+snapshottest==0.5.0
+termcolor==1.1.0
