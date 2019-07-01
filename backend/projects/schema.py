@@ -4,7 +4,7 @@ from users.schema import UserType
 from graphql import GraphQLError
 
 
-from .models import Project, Vote, Comment
+from .models import Project, Vote, Comment, UserProfile
 
 class ProjectType(DjangoObjectType):
     class Meta:
@@ -47,7 +47,7 @@ class CreateVote(graphene.Mutation):
                 raise Exception('Could not find the specified project.')
 
         vote = Vote(
-            creator=user,
+            creator=UserProfile.objects.get(user=user),
             type=vote_type,
             project=project,
         )
@@ -80,7 +80,7 @@ class CreateProject(graphene.Mutation):
         if user.is_anonymous:
             raise GraphQLError('User must be logged in to create a project')
 
-        project = Project(name=name, description=description, creator=user, lifecycle=lifecycle)
+        project = Project(name=name, description=description, creator=UserProfile.objects.get(user=user), lifecycle=lifecycle)
         project.save()
 
         return CreateProject(

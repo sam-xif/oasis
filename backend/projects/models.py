@@ -8,7 +8,7 @@ from enum import Enum
 
 class UserProfile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
-    last_login = models.DateTimeField()
+    last_login = models.DateTimeField(auto_now_add=True)
     # profile_picture = models.ImageField()
 
 
@@ -64,7 +64,7 @@ class Resource(models.Model):
 
 class Comment(models.Model):
     text = models.CharField(max_length=200)
-    creator = models.ForeignKey(settings.AUTH_USER_MODEL, blank=True, on_delete=models.PROTECT)
+    creator = models.ForeignKey(UserProfile, blank=True, on_delete=models.PROTECT)
     created_on = models.DateTimeField(blank=True, auto_now_add=True)
     updated_on = models.DateTimeField(blank=True, auto_now=True)
     project = models.ForeignKey(
@@ -85,7 +85,7 @@ class Vote(models.Model):
         ("U", "Up"),
         ("D", "Down"),
     )
-    creator = models.ForeignKey(settings.AUTH_USER_MODEL, blank=True, on_delete=models.CASCADE)
+    creator = models.ForeignKey(UserProfile, blank=True, on_delete=models.CASCADE)
     type = models.CharField(max_length=1)  # Do custom validation on choices=TYPES https://github.com/graphql-python/graphene-django/issues/185#issuecomment-388469296
     project = models.ForeignKey(
         Project,

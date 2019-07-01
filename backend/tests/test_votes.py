@@ -1,7 +1,7 @@
 from django.test import TestCase, RequestFactory
 from graphene.test import Client, GraphQLError
 from django.contrib.auth.models import User, AnonymousUser
-from .models import Project, Vote
+from projects.models import Project, Vote, UserProfile
 
 from oasis_app.schema import schema
 
@@ -10,8 +10,10 @@ class VoteTest(TestCase):
     def login_test_user(self):
         self.user = User.objects.create_user(username='test', password='test')
         self.user.save()
+        self.user_profile = UserProfile.objects.create(user=self.user)
+        self.user_profile.save()
         self.client.login(username='test', password='test')
-        return self.user
+        return self.user_profile
 
     def setUp(self):
         test_user = self.login_test_user()
