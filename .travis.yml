@@ -1,0 +1,26 @@
+matrix:
+  include:
+  # backend
+  - name: "Backend Tests"
+    language: python
+    before_install:
+      - cd backend
+    python:
+    - "3.6"
+    install:
+    - pip install -r requirements.txt
+    script:
+    - python manage.py test tests
+
+  # frontend
+  - name: "Frontend Tests"
+    language: node_js
+    before_install:
+    - cd frontend
+    node_js:
+    - "stable"
+    cache:
+      directories:
+      - frontend/node_modules
+    script:
+    - npm test
